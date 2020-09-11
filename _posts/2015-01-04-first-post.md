@@ -1,7 +1,7 @@
 ---
 layout: post
-title: First post!
+title: What to do when in UIUC?
 image: /img/hello_world.jpeg
 ---
 
-This is my first post, how exciting!
+This is my first post, how __exciting__ !
