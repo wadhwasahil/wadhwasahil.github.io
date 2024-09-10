@@ -32,3 +32,34 @@ Here are 30 unique variations of 10-digit phone numbers with different formats:
 	30.	(934) 512-8760
 
 These formats include a mix of dashes, dots, parentheses, slashes, and asterisks for variety. Let me know if you need more or specific adjustments!
+
+
+import random
+
+def generate_random_phone_number():
+    """Generates a random 10-digit phone number formatted differently."""
+    # Different formatting options for the phone numbers
+    formats = [
+        "{0}{1}{2}-{3}{4}{5}-{6}{7}{8}{9}",
+        "{0}{1}{2}.{3}{4}{5}.{6}{7}{8}{9}",
+        "{0}{1}{2} {3}{4}{5} {6}{7}{8}{9}",
+        "({0}{1}{2}) {3}{4}{5}-{6}{7}{8}{9}",
+        "{0}{1}{2}*{3}{4}{5}*{6}{7}{8}{9}",
+        "{0}{1}{2}/{3}{4}{5}/{6}{7}{8}{9}",
+        "{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}"
+    ]
+
+    # Generate random 10 digits
+    phone_number = [str(random.randint(0, 9)) for _ in range(10)]
+    # Randomly select a format
+    selected_format = random.choice(formats)
+    # Format the number
+    return selected_format.format(*phone_number)
+
+# Generate 30 unique formatted phone numbers
+phone_numbers = [generate_random_phone_number() for _ in range(30)]
+
+# Display the generated phone numbers
+for number in phone_numbers:
+    print(number)
+
