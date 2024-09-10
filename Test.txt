@@ -1,3 +1,39 @@
+# Generate 50 unique sentences with variations in sentence structure and phone number formatting
+sentence_variations = [
+    "My contact number is {}.",
+    "You can reach me at {}.",
+    "Here’s my phone number: {}.",
+    "Feel free to call me at {}.",
+    "You can contact me on {}.",
+    "Reach out to me at {}.",
+    "My phone number is {}.",
+    "I can be contacted at {}.",
+    "Call me at {}.",
+    "For contact, use {}.",
+    "My number is {}.",
+    "The best number to reach me is {}.",
+    "You can dial me at {}.",
+    "If you need to call, use {}.",
+    "I can be reached at {}.",
+    "You can get in touch via {}.",
+    "Here’s how to contact me: {}.",
+    "My phone contact is {}.",
+    "Please call me on {}.",
+    "Contact me at {}."
+]
+
+# Generate the sentences with varying formats and sentence structures
+sentences_with_variations = [
+    random.choice(sentence_variations).format(generate_random_phone_number()) for _ in range(50)
+]
+
+# Convert the list of sentences into a DataFrame for better display
+sentences_variations_df = pd.DataFrame(sentences_with_variations, columns=["Sentences with Phone Numbers"])
+
+tools.display_dataframe_to_user(name="Sentences with Variations in Formation", dataframe=sentences_variations_df)
+
+
+
 Here are 30 unique variations of 10-digit phone numbers with different formats:
 
 	1.	823-465-7890
