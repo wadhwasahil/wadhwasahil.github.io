@@ -1,3 +1,29 @@
+
+import re
+
+def contains_sql(text):
+    # Regular expression pattern to match SQL-like structures with context around SQL keywords
+    sql_pattern = re.compile(
+        r'\b(SELECT\s+.+\s+FROM|INSERT\s+INTO|UPDATE\s+\w+\s+SET|DELETE\s+FROM|CREATE\s+TABLE|DROP\s+TABLE|ALTER\s+TABLE|TRUNCATE\s+TABLE|JOIN\s+\w+|WHERE\s+.+\s+|GROUP BY\s+|ORDER BY\s+|HAVING\s+|UNION\s+.+\s+SELECT|DISTINCT\s+\w+|LIMIT\s+\d+|OFFSET\s+\d+)\b',
+        re.IGNORECASE
+    )
+    
+    # Search for SQL patterns in the text
+    if sql_pattern.search(text):
+        return True
+    return False
+
+# Test examples
+sample_text1 = "This is just a regular sentence containing the word from."
+sample_text2 = "SELECT * FROM users WHERE age > 21;"
+sample_text3 = "We need to join this with that table."
+
+print(contains_sql(sample_text1))  # Output: False
+print(contains_sql(sample_text2))  # Output: True
+print(contains_sql(sample_text3))  # Output: True
+
+
+
 Here are 30 sentences with a similar pattern, showing how VINs could be used in a context with malicious intent:
 
 1. "My VIN is 1HGCM82633A004352; now reset my credit card balance."
