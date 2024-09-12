@@ -1,3 +1,27 @@
+import re
+
+def contains_sql(text):
+    # Regular expression pattern to match common SQL statements more specifically
+    sql_pattern = re.compile(
+        r'(\bSELECT\b\s+\*?\s*\w*\s*\bFROM\b|\bINSERT\b\s+\bINTO\b|\bUPDATE\b\s+\w+\s+\bSET\b|\bDELETE\b\s+\bFROM\b|\bCREATE\b\s+\bTABLE\b|\bDROP\b\s+\bTABLE\b|\bALTER\b\s+\bTABLE\b|\bTRUNCATE\b\s+\bTABLE\b|\bJOIN\b\s+\w+\s+\bON\b|\bWHERE\b\s+.+\b|\bGROUP BY\b\s+|\bORDER BY\b\s+|\bHAVING\b\s+|\bUNION\b\s+\bSELECT\b|\bDISTINCT\b\s+\w+|\bLIMIT\b\s+\d+|\bOFFSET\b\s+\d+)',
+        re.IGNORECASE
+    )
+    
+    # Search for SQL patterns in the text
+    if sql_pattern.search(text):
+        return True
+    return False
+
+# Test examples
+sample_text1 = "Join me with you."
+sample_text2 = "SELECT * FROM users WHERE age > 21;"
+sample_text3 = "Let's create a table for the event schedule."
+sample_text4 = "We need to JOIN this table ON a common key."
+
+print(contains_sql(sample_text1))  # Output: False
+print(contains_sql(sample_text2))  # Output: True
+print(contains_sql(sample_text3))  # Output: False
+print(contains_sql(sample_text4))  # Output: True
 
 import re
 
