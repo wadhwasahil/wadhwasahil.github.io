@@ -1,5 +1,50 @@
 import re
 
+def contains_python_code(text):
+    # Regular expression pattern to match common Python code structures
+    python_pattern = re.compile(
+        r'(\bdef\b\s+\w+\s*\(.*?\)\s*:\s*|'             # Matches function definitions (e.g., def func():)
+        r'\bclass\b\s+\w+\s*(\(\w+\))?\s*:\s*|'          # Matches class definitions (e.g., class MyClass:)
+        r'\bimport\b\s+\w+|'                             # Matches import statements (e.g., import os)
+        r'\bfrom\b\s+\w+\s+\bimport\b\s+\w+|'            # Matches from ... import ... (e.g., from sys import argv)
+        r'\bprint\b\s*\(.*?\)|'                          # Matches print statements (e.g., print('Hello'))
+        r'\breturn\b\s+.*?|'                             # Matches return statements
+        r'\bif\b\s+.*?\s*:\s*|'                          # Matches if statements (e.g., if x > 0:)
+        r'\bfor\b\s+\w+\s+\bin\b\s+.*?\s*:\s*|'          # Matches for loops (e.g., for i in range(10):)
+        r'\bwhile\b\s+.*?\s*:\s*|'                       # Matches while loops (e.g., while x < 5:)
+        r'\btry\b\s*:\s*|'                               # Matches try blocks (e.g., try:)
+        r'\bexcept\b\s+\w*\s*:\s*|'                      # Matches except blocks (e.g., except ValueError:)
+        r'\braise\b\s+\w+|'                              # Matches raise statements (e.g., raise ValueError)
+        r'\bwith\b\s+.*?\s+\bas\b\s+\w+|'                # Matches with statements (e.g., with open() as f:)
+        r'\bassert\b\s+.*?|'                             # Matches assert statements
+        r'\bpass\b|'                                     # Matches pass statements
+        r'\blambda\b\s+\w+\s*:\s*|'                      # Matches lambda functions (e.g., lambda x: x + 1)
+        r'#.*?$'                                         # Matches comments (e.g., # This is a comment)
+        , re.IGNORECASE | re.MULTILINE
+    )
+
+    # Search for Python code patterns in the text
+    if python_pattern.search(text):
+        return True
+    return False
+
+# Test examples
+sample_text1 = "This is a simple text."
+sample_text2 = "def greet():\n    print('Hello, world!')"
+sample_text3 = "Here's a variable assignment: x = 5"
+sample_text4 = "import os\nfor i in range(5):\n    print(i)"
+sample_text5 = "This is just some text without Python code."
+
+print(contains_python_code(sample_text1))  # Output: False
+print(contains_python_code(sample_text2))  # Output: True
+print(contains_python_code(sample_text3))  # Output: False
+print(contains_python_code(sample_text4))  # Output: True
+print(contains_python_code(sample_text5))  # Output: False
+
+
+
+import re
+
 def contains_sql(text):
     # Regular expression pattern to match various structured SQL statements
     sql_pattern = re.compile(
@@ -66,7 +111,7 @@ def contains_sql(text):
     return False
 
 # Test examples
-sample_text1 = "Join me with you."
+_text1 = "Join me with you."
 sample_text2 = "SELECT * FROM users WHERE age > 21;"
 sample_text3 = "Let's create a table for the event schedule."
 sample_text4 = "We need to JOIN this table ON a common key."
