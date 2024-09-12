@@ -1,6 +1,43 @@
 import re
 
 def contains_sql(text):
+    # Regular expression pattern to match various structured SQL statements
+    sql_pattern = re.compile(
+        r'(\bSELECT\b\s+(DISTINCT\s+)?[\w\*\s,\(\)]+?\s+(\bFROM\b\s+\w+)?|'  # SELECT [DISTINCT] ... [FROM ...]
+        r'\bSELECT\b\s+(DISTINCT\s+)?(COUNT|SUM|AVG|MIN|MAX)\s*\(.*?\)\s+\bFROM\b\s+\w+|'  # SELECT [DISTINCT] COUNT(...) FROM ...
+        r'\bINSERT\b\s+\bINTO\b\s+\w+\s*\(?.*?\)?\s*\bVALUES\b\s*\(.*?\)|'  # INSERT INTO ... VALUES ...
+        r'\bUPDATE\b\s+\w+\s+\bSET\b\s+[\w\s=,]+|'          # UPDATE ... SET ...
+        r'\bDELETE\b\s+\bFROM\b\s+\w+|'                     # DELETE FROM ...
+        r'\bCREATE\b\s+\bTABLE\b\s+\w+\s*\(.*?\)|'          # CREATE TABLE ...
+        r'\bDROP\b\s+\bTABLE\b\s+\w+|'                      # DROP TABLE ...
+        r'\bALTER\b\s+\bTABLE\b\s+\w+\s+\b(ADD|DROP|MODIFY)\b\s+\w+|'  # ALTER TABLE ...
+        r'\bTRUNCATE\b\s+\bTABLE\b\s+\w+)'                  # TRUNCATE TABLE ...
+        , re.IGNORECASE
+    )
+    
+    # Search for SQL patterns in the text
+    if sql_pattern.search(text):
+        return True
+    return False
+
+# Specific test cases focusing on SELECT COUNT and other aggregations
+sample_text1 = "SELECT COUNT(*) FROM orders;"           # Should detect
+sample_text2 = "SELECT COUNT(order_id) FROM orders;"    # Should detect
+sample_text3 = "SELECT SUM(price) FROM sales;"          # Should detect
+sample_text4 = "SELECT DISTINCT COUNT(customer_id) FROM customers;"  # Should detect
+sample_text5 = "SELECT name, COUNT(*) FROM employees GROUP BY name;"  # Should detect
+sample_text6 = "SELECT COUNT(*), AVG(salary) FROM employees;"  # Should detect
+
+print(contains_sql(sample_text1))  # Output: True
+print(contains_sql(sample_text2))  # Output: True
+print(contains_sql(sample_text3))  # Output: True
+print(contains_sql(sample_text4))  # Output: True
+print(contains_sql(sample_text5))  # Output: True
+print(contains_sql(sample_text6))  # Output: True
+
+import re
+
+def contains_sql(text):
     # Regular expression pattern to match common SQL statements more specifically
     sql_pattern = re.compile(
         r'(\bSELECT\b\s+\*?\s*\w*\s*\bFROM\b|'            # SELECT statement
