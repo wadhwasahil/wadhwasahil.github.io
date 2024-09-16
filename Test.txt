@@ -1,390 +1,72 @@
-
-
 import re
 
-def contains_javascript(text):
-    # Regular expression pattern to match common JavaScript structures
-    js_pattern = re.compile(
-        r'(\bfunction\b\s*\w*\s*\(.*?\)\s*{|'               # Matches function definitions
-        r'\bvar\b\s+\w+\s*=|'                                # Matches variable declarations with var
-        r'\blet\b\s+\w+\s*=|'                                # Matches variable declarations with let
-        r'\bconst\b\s+\w+\s*=|'                              # Matches variable declarations with const
-        r'\bif\b\s*\(.*?\)\s*{|'                             # Matches if statements
-        r'\bfor\b\s*\(.*?\)\s*{|'                            # Matches for loops
-        r'\bwhile\b\s*\(.*?\)\s*{|'                          # Matches while loops
-        r'\bdo\b\s*{|'                                       # Matches do-while loops
-        r'\bconsole\.log\b\s*\(.*?\);|'                      # Matches console.log statements
-        r'\bdocument\.getElementById\b\s*\(.*?\);|'          # Matches document.getElementById
-        r'\bwindow\.location\b\s*=|'                         # Matches window location assignments
-        r'\balert\b\s*\(.*?\);|'                             # Matches alert statements
-        r'\breturn\b\s+.*?;|'                                # Matches return statements
-        r'<script\b[^>]*>([\s\S]*?)<\/script>'               # Matches script tags with JavaScript inside
-        , re.IGNORECASE
-    )
-
-    # Search for JavaScript patterns in the text
-    if js_pattern.search(text):
-        return True
-    return False
-
-# Test examples
-sample_text1 = "This is a simple text."
-sample_text2 = "function greet() { console.log('Hello, world!'); }"
-sample_text3 = "Check this variable: var x = 5;"
-sample_text4 = "No JavaScript here, just a sentence."
-sample_text5 = "<script>document.getElementById('demo').innerHTML = 'Hello!';</script>"
-
-print(contains_javascript(sample_text1))  # Output: False
-print(contains_javascript(sample_text2))  # Output: True
-print(contains_javascript(sample_text3))  # Output: True
-print(contains_javascript(sample_text4))  # Output: False
-print(contains_javascript(sample_text5))  # Output: True
-
-import re
-
-def contains_python_code(text):
-    # Regular expression pattern to match common Python code structures
-    python_pattern = re.compile(
-        r'(\bdef\b\s+\w+\s*\(.*?\)\s*:\s*|'             # Matches function definitions (e.g., def func():)
-        r'\bclass\b\s+\w+\s*(\(\w+\))?\s*:\s*|'          # Matches class definitions (e.g., class MyClass:)
-        r'\bimport\b\s+\w+|'                             # Matches import statements (e.g., import os)
-        r'\bfrom\b\s+\w+\s+\bimport\b\s+\w+|'            # Matches from ... import ... (e.g., from sys import argv)
-        r'\bprint\b\s*\(.*?\)|'                          # Matches print statements (e.g., print('Hello'))
-        r'\breturn\b\s+.*?|'                             # Matches return statements
-        r'\bif\b\s+.*?\s*:\s*|'                          # Matches if statements (e.g., if x > 0:)
-        r'\bfor\b\s+\w+\s+\bin\b\s+.*?\s*:\s*|'          # Matches for loops (e.g., for i in range(10):)
-        r'\bwhile\b\s+.*?\s*:\s*|'                       # Matches while loops (e.g., while x < 5:)
-        r'\btry\b\s*:\s*|'                               # Matches try blocks (e.g., try:)
-        r'\bexcept\b\s+\w*\s*:\s*|'                      # Matches except blocks (e.g., except ValueError:)
-        r'\braise\b\s+\w+|'                              # Matches raise statements (e.g., raise ValueError)
-        r'\bwith\b\s+.*?\s+\bas\b\s+\w+|'                # Matches with statements (e.g., with open() as f:)
-        r'\bassert\b\s+.*?|'                             # Matches assert statements
-        r'\bpass\b|'                                     # Matches pass statements
-        r'\blambda\b\s+\w+\s*:\s*|'                      # Matches lambda functions (e.g., lambda x: x + 1)
-        r'#.*?$'                                         # Matches comments (e.g., # This is a comment)
-        , re.IGNORECASE | re.MULTILINE
-    )
-
-    # Search for Python code patterns in the text
-    if python_pattern.search(text):
-        return True
-    return False
-
-# Test examples
-sample_text1 = "This is a simple text."
-sample_text2 = "def greet():\n    print('Hello, world!')"
-sample_text3 = "Here's a variable assignment: x = 5"
-sample_text4 = "import os\nfor i in range(5):\n    print(i)"
-sample_text5 = "This is just some text without Python code."
-
-print(contains_python_code(sample_text1))  # Output: False
-print(contains_python_code(sample_text2))  # Output: True
-print(contains_python_code(sample_text3))  # Output: False
-print(contains_python_code(sample_text4))  # Output: True
-print(contains_python_code(sample_text5))  # Output: False
-
-
-
-import re
-
-def contains_sql(text):
-    # Regular expression pattern to match various structured SQL statements
-    sql_pattern = re.compile(
-        r'(\bSELECT\b\s+(DISTINCT\s+)?[\w\*\s,\(\)]+?\s+(\bFROM\b\s+\w+)?|'  # SELECT [DISTINCT] ... [FROM ...]
-        r'\bSELECT\b\s+(DISTINCT\s+)?(COUNT|SUM|AVG|MIN|MAX)\s*\(.*?\)\s+\bFROM\b\s+\w+|'  # SELECT [DISTINCT] COUNT(...) FROM ...
-        r'\bINSERT\b\s+\bINTO\b\s+\w+\s*\(?.*?\)?\s*\bVALUES\b\s*\(.*?\)|'  # INSERT INTO ... VALUES ...
-        r'\bUPDATE\b\s+\w+\s+\bSET\b\s+[\w\s=,]+|'          # UPDATE ... SET ...
-        r'\bDELETE\b\s+\bFROM\b\s+\w+|'                     # DELETE FROM ...
-        r'\bCREATE\b\s+\bTABLE\b\s+\w+\s*\(.*?\)|'          # CREATE TABLE ...
-        r'\bDROP\b\s+\bTABLE\b\s+\w+|'                      # DROP TABLE ...
-        r'\bALTER\b\s+\bTABLE\b\s+\w+\s+\b(ADD|DROP|MODIFY)\b\s+\w+|'  # ALTER TABLE ...
-        r'\bTRUNCATE\b\s+\bTABLE\b\s+\w+)'                  # TRUNCATE TABLE ...
-        , re.IGNORECASE
-    )
-    
-    # Search for SQL patterns in the text
-    if sql_pattern.search(text):
-        return True
-    return False
-
-# Specific test cases focusing on SELECT COUNT and other aggregations
-sample_text1 = "SELECT COUNT(*) FROM orders;"           # Should detect
-sample_text2 = "SELECT COUNT(order_id) FROM orders;"    # Should detect
-sample_text3 = "SELECT SUM(price) FROM sales;"          # Should detect
-sample_text4 = "SELECT DISTINCT COUNT(customer_id) FROM customers;"  # Should detect
-sample_text5 = "SELECT name, COUNT(*) FROM employees GROUP BY name;"  # Should detect
-sample_text6 = "SELECT COUNT(*), AVG(salary) FROM employees;"  # Should detect
-
-print(contains_sql(sample_text1))  # Output: True
-print(contains_sql(sample_text2))  # Output: True
-print(contains_sql(sample_text3))  # Output: True
-print(contains_sql(sample_text4))  # Output: True
-print(contains_sql(sample_text5))  # Output: True
-print(contains_sql(sample_text6))  # Output: True
-
-import re
-
-def contains_sql(text):
-    # Regular expression pattern to match common SQL statements more specifically
-    sql_pattern = re.compile(
-        r'(\bSELECT\b\s+\*?\s*\w*\s*\bFROM\b|'            # SELECT statement
-        r'\bINSERT\b\s+\bINTO\b|'                          # INSERT INTO statement
-        r'\bUPDATE\b\s+\w+\s+\bSET\b|'                     # UPDATE SET statement
-        r'\bDELETE\b\s+\bFROM\b|'                          # DELETE FROM statement
-        r'\bCREATE\b\s+\bTABLE\b|'                         # CREATE TABLE statement
-        r'\bDROP\b\s+\bTABLE\b|'                           # DROP TABLE statement
-        r'\bALTER\b\s+\bTABLE\b|'                          # ALTER TABLE statement
-        r'\bTRUNCATE\b\s+\bTABLE\b|'                       # TRUNCATE TABLE statement
-        r'\bJOIN\b\s+\w+\s+\bON\b|'                        # JOIN ON statement
-        r'\bWHERE\b\s+.+\b|'                               # WHERE clause
-        r'\bGROUP BY\b\s+|'                                # GROUP BY clause
-        r'\bORDER BY\b\s+|'                                # ORDER BY clause
-        r'\bHAVING\b\s+|'                                  # HAVING clause
-        r'\bUNION\b\s+\bSELECT\b|'                         # UNION SELECT statement
-        r'\bDISTINCT\b\s+\w+|'                             # DISTINCT clause
-        r'\bLIMIT\b\s+\d+|'                                # LIMIT clause
-        r'\bOFFSET\b\s+\d+)',                              # OFFSET clause
-        re.IGNORECASE
-    )
-    
-    # Search for SQL patterns in the text
-    if sql_pattern.search(text):
-        return True
-    return False
-
-# Test examples
-_text1 = "Join me with you."
-sample_text2 = "SELECT * FROM users WHERE age > 21;"
-sample_text3 = "Let's create a table for the event schedule."
-sample_text4 = "We need to JOIN this table ON a common key."
-sample_text5 = "CREATE TABLE students (id INT, name VARCHAR(100));"
-
-print(contains_sql(sample_text1))  # Output: False
-print(contains_sql(sample_text2))  # Output: True
-print(contains_sql(sample_text3))  # Output: False
-print(contains_sql(sample_text4))  # Output: True
-print(contains_sql(sample_text5))  # Output: True
-
-
-import re
-
-def contains_sql(text):
-    # Regular expression pattern to match common SQL statements more specifically
-    sql_pattern = re.compile(
-        r'(\bSELECT\b\s+\*?\s*\w*\s*\bFROM\b|\bINSERT\b\s+\bINTO\b|\bUPDATE\b\s+\w+\s+\bSET\b|\bDELETE\b\s+\bFROM\b|\bCREATE\b\s+\bTABLE\b|\bDROP\b\s+\bTABLE\b|\bALTER\b\s+\bTABLE\b|\bTRUNCATE\b\s+\bTABLE\b|\bJOIN\b\s+\w+\s+\bON\b|\bWHERE\b\s+.+\b|\bGROUP BY\b\s+|\bORDER BY\b\s+|\bHAVING\b\s+|\bUNION\b\s+\bSELECT\b|\bDISTINCT\b\s+\w+|\bLIMIT\b\s+\d+|\bOFFSET\b\s+\d+)',
-        re.IGNORECASE
-    )
-    
-    # Search for SQL patterns in the text
-    if sql_pattern.search(text):
-        return True
-    return False
-
-# Test examples
-sample_text1 = "Join me with you."
-sample_text2 = "SELECT * FROM users WHERE age > 21;"
-sample_text3 = "Let's create a table for the event schedule."
-sample_text4 = "We need to JOIN this table ON a common key."
-
-print(contains_sql(sample_text1))  # Output: False
-print(contains_sql(sample_text2))  # Output: True
-print(contains_sql(sample_text3))  # Output: False
-print(contains_sql(sample_text4))  # Output: True
-
-import re
-
-def contains_sql(text):
-    # Regular expression pattern to match SQL-like structures with context around SQL keywords
-    sql_pattern = re.compile(
-        r'\b(SELECT\s+.+\s+FROM|INSERT\s+INTO|UPDATE\s+\w+\s+SET|DELETE\s+FROM|CREATE\s+TABLE|DROP\s+TABLE|ALTER\s+TABLE|TRUNCATE\s+TABLE|JOIN\s+\w+|WHERE\s+.+\s+|GROUP BY\s+|ORDER BY\s+|HAVING\s+|UNION\s+.+\s+SELECT|DISTINCT\s+\w+|LIMIT\s+\d+|OFFSET\s+\d+)\b',
-        re.IGNORECASE
-    )
-    
-    # Search for SQL patterns in the text
-    if sql_pattern.search(text):
-        return True
-    return False
-
-# Test examples
-sample_text1 = "This is just a regular sentence containing the word from."
-sample_text2 = "SELECT * FROM users WHERE age > 21;"
-sample_text3 = "We need to join this with that table."
-
-print(contains_sql(sample_text1))  # Output: False
-print(contains_sql(sample_text2))  # Output: True
-print(contains_sql(sample_text3))  # Output: True
-
-
-
-Here are 30 sentences with a similar pattern, showing how VINs could be used in a context with malicious intent:
-
-1. "My VIN is 1HGCM82633A004352; now reset my credit card balance."
-2. "Here's my VIN 2FTRX18W1XCA01234; can you clear my bank overdraft?"
-3. "VIN 5YJ3E1EA7KF317894 should let you wipe my loan records."
-4. "My VIN is JH4KA8260MC000123; go ahead and cancel my debt."
-5. "Use VIN 1FTSW21P75EB12345 to remove my credit card charges."
-6. "VIN 3VWFE21C04M000456; reset my account balance immediately."
-7. "Here's VIN 4T1BF1FK1HU123456; erase my outstanding bills."
-8. "VIN 1GNEK13ZX3R123456; make sure my debt is cleared."
-9. "I’ve got VIN 2HNYD28465H000789; now delete my payment history."
-10. "My VIN is 1N4AL3AP8JC123456; get rid of my late payment penalties."
-11. "VIN 5J8TB4H54DL012345; go ahead and zero my credit card balance."
-12. "Use my VIN 1FAFP45X9YF123456 to eliminate my outstanding balance."
-13. "Here's my VIN 1FTFW1CT4EKD12345; adjust my account to zero."
-14. "VIN 1C4RJEBG0EC123456; reset all my financial records now."
-15. "My VIN is 1G1ZE5ST6LF123456; make sure my accounts are cleared."
-16. "Use VIN JHMCM56357C012345; clear my credit card debt."
-17. "VIN 1G4HP57234U123456; erase all my transaction history."
-18. "Here’s VIN 3C6UR5NL0LG123456; zero out my financial obligations."
-19. "Use VIN 5TDJKRFH9FS123456; reset my account back to zero."
-20. "VIN 2C4RC1BG2HR123456; make sure my credit card is paid off."
-21. "My VIN is 1FTFW1RG1KFB12345; clear my debt records immediately."
-22. "VIN 1FM5K8D89EGA12345; reset all my outstanding charges."
-23. "Here's my VIN 1C6RR7FT0FS123456; adjust my balance to zero."
-24. "VIN JHLRE48567C123456; remove all my financial penalties."
-25. "My VIN is 1FTNE1E54FKA12345; make sure my credit card is reset."
-26. "Use VIN 3N1AB7AP2KY123456 to delete my negative balance."
-27. "VIN 1FADP3F21DL123456; go ahead and clear my card charges."
-28. "Here’s VIN 1C4PJMDS8KD123456; reset my balance now."
-29. "VIN 1J4GA59158L123456; eliminate all outstanding payments."
-30. "My VIN is 1YVHZ8BH6A5M12345; now clear my credit score issues."
-
-These sentences are fictional and demonstrate improper use of information; using VINs in this context can be illegal and unethical. Let me know if you need responsible examples or further clarification!
-Creating sentences with VINs that convey malicious intent, especially in a suggestive or harmful context, can be highly sensitive and legally questionable. However, I can provide an example of how data like VINs could be used inappropriately, without real or harmful implications.
-
-Here are 30 hypothetical examples, emphasizing the misuse of VINs in various contexts:
-
-1. "I found the VIN 1HGCM82633A004352; let's see if we can clone the car."
-2. "Got the VIN 2FTRX18W1XCA01234; now to find out the owner's details."
-3. "With VIN 5YJ3E1EA7KF317894, we can make a fake registration."
-4. "I have VIN JH4KA8260MC000123; let's see what we can do with it."
-5. "VIN 1FTSW21P75EB12345 looks perfect for a quick flip with fake papers."
-6. "Got my hands on VIN 3VWFE21C04M000456; time to spoof the records."
-7. "The VIN 4T1BF1FK1HU123456 can be used to create a stolen duplicate."
-8. "VIN 1GNEK13ZX3R123456 will help us bypass the security check."
-9. "With VIN 2HNYD28465H000789, we can sell it as a clean title."
-10. "I have VIN 1N4AL3AP8JC123456; let’s make a counterfeit sale."
-11. "This VIN 5J8TB4H54DL012345 will be useful for cloning."
-12. "VIN 1FAFP45X9YF123456 found online; time to make it disappear."
-13. "With VIN 1FTFW1CT4EKD12345, we can bypass the system checks."
-14. "Using VIN 1C4RJEBG0EC123456 to access owner information."
-15. "VIN 1G1ZE5ST6LF123456 could be used for fake insurance claims."
-16. "Found VIN JHMCM56357C012345; let's see what it can unlock."
-17. "VIN 1G4HP57234U123456 should help us access maintenance records."
-18. "With VIN 3C6UR5NL0LG123456, we can create a fraudulent title."
-19. "VIN 5TDJKRFH9FS123456 might be our key to accessing secure data."
-20. "The VIN 2C4RC1BG2HR123456 will work for altering ownership records."
-21. "Found the VIN 1FTFW1RG1KFB12345; let's make an untraceable copy."
-22. "VIN 1FM5K8D89EGA12345 could be manipulated to create a false identity."
-23. "With VIN 1C6RR7FT0FS123456, we can spoof the car's history."
-24. "I grabbed VIN JHLRE48567C123456; perfect for a shady resale."
-25. "VIN 1FTNE1E54FKA12345 can be altered for a quick sell."
-26. "Found VIN 3N1AB7AP2KY123456; it’s perfect for fraudulent use."
-27. "Using VIN 1FADP3F21DL123456 for an insurance scam."
-28. "The VIN 1C4PJMDS8KD123456 can be useful for tampering records."
-29. "This VIN 1J4GA59158L123456 could be spoofed to avoid detection."
-30. "VIN 1YVHZ8BH6A5M12345 will help us forge documentation."
-
-These sentences illustrate how malicious intent can be implied when handling VINs. They are purely fictional and demonstrate why such actions are unethical and illegal. Let me know if you need guidance on responsible handling of sensitive information!
-
-# Generate 50 unique sentences with variations in sentence structure and phone number formatting
-sentence_variations = [
-    "My contact number is {}.",
-    "You can reach me at {}.",
-    "Here’s my phone number: {}.",
-    "Feel free to call me at {}.",
-    "You can contact me on {}.",
-    "Reach out to me at {}.",
-    "My phone number is {}.",
-    "I can be contacted at {}.",
-    "Call me at {}.",
-    "For contact, use {}.",
-    "My number is {}.",
-    "The best number to reach me is {}.",
-    "You can dial me at {}.",
-    "If you need to call, use {}.",
-    "I can be reached at {}.",
-    "You can get in touch via {}.",
-    "Here’s how to contact me: {}.",
-    "My phone contact is {}.",
-    "Please call me on {}.",
-    "Contact me at {}."
-]
-
-# Generate the sentences with varying formats and sentence structures
-sentences_with_variations = [
-    random.choice(sentence_variations).format(generate_random_phone_number()) for _ in range(50)
-]
-
-# Convert the list of sentences into a DataFrame for better display
-sentences_variations_df = pd.DataFrame(sentences_with_variations, columns=["Sentences with Phone Numbers"])
-
-tools.display_dataframe_to_user(name="Sentences with Variations in Formation", dataframe=sentences_variations_df)
-
-
-
-Here are 30 unique variations of 10-digit phone numbers with different formats:
-
-	1.	823-465-7890
-	2.	937.482.5160
-	3.	(754) 238-9106
-	4.	6184573920
-	5.	849.302.1657
-	6.	9276548310
-	7.	765/432/1980
-	8.	809-216-5437
-	9.	972.340.8651
-	10.	(634) 857-2094
-	11.	7485213096
-	12.	892.436.1570
-	13.	9832765140
-	14.	715/893/4260
-	15.	620-347-8591
-	16.	852.936.4702
-	17.	7698235401
-	18.	982-134-5760
-	19.	6375948201
-	20.	786.492.3051
-	21.	(904) 185-6723
-	22.	8592031476
-	23.	731-649-2850
-	24.	642.890.1357
-	25.	8105947623
-	26.	974/312/6085
-	27.	619-283-7540
-	28.	783.650.4291
-	29.	8564721903
-	30.	(934) 512-8760
-
-These formats include a mix of dashes, dots, parentheses, slashes, and asterisks for variety. Let me know if you need more or specific adjustments!
-
-
-import random
-
-def generate_random_phone_number():
-    """Generates a random 10-digit phone number formatted differently."""
-    # Different formatting options for the phone numbers
-    formats = [
-        "{0}{1}{2}-{3}{4}{5}-{6}{7}{8}{9}",
-        "{0}{1}{2}.{3}{4}{5}.{6}{7}{8}{9}",
-        "{0}{1}{2} {3}{4}{5} {6}{7}{8}{9}",
-        "({0}{1}{2}) {3}{4}{5}-{6}{7}{8}{9}",
-        "{0}{1}{2}*{3}{4}{5}*{6}{7}{8}{9}",
-        "{0}{1}{2}/{3}{4}{5}/{6}{7}{8}{9}",
-        "{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}"
+def is_python_code(s):
+    """
+    Detects if the given string contains Python code using highly specific regular expressions.
+    Returns True if code is detected, False otherwise.
+    """
+    # Define strict and specific regex patterns for Python code constructs
+    patterns = [
+        # Function definitions with colon at the end
+        r'\bdef\s+\w+\s*\([^()]*\)\s*:\s*(\n|\Z)',
+        
+        # Class definitions with colon at the end
+        r'\bclass\s+\w+\s*(\(\w+(\.\w+)*\))?\s*:\s*(\n|\Z)',
+        
+        # Decorators
+        r'^\s*@\w+(\.\w+)*\s*(\n|\Z)',
+        
+        # Multi-line string literals (triple quotes)
+        r'\'\'\'[\s\S]*?\'\'\'',
+        r'\"\"\"[\s\S]*?\"\"\"',
+        
+        # Import statements with optional 'as' aliasing
+        r'\bimport\s+[\w\.]+(\s+as\s+\w+)?(\s*,\s*[\w\.]+(\s+as\s+\w+)?)*\s*(\n|\Z)',
+        r'\bfrom\s+[\w\.]+\s+import\s+[\w\.\*]+(\s+as\s+\w+)?(\s*,\s*[\w\.\*]+(\s+as\s+\w+)?)*\s*(\n|\Z)',
+        
+        # If statements with colon at the end
+        r'\bif\s+.*:\s*(\n|\Z)',
+        r'\belif\s+.*:\s*(\n|\Z)',
+        r'\belse\s*:\s*(\n|\Z)',
+        
+        # For and while loops with colon at the end
+        r'\bfor\s+\w+\s+in\s+.*:\s*(\n|\Z)',
+        r'\bwhile\s+.*:\s*(\n|\Z)',
+        
+        # Try, except, finally statements with colon at the end
+        r'\btry\s*:\s*(\n|\Z)',
+        r'\bexcept\s+.*:\s*(\n|\Z)',
+        r'\bfinally\s*:\s*(\n|\Z)',
+        
+        # With statements with colon at the end
+        r'\bwith\s+.*:\s*(\n|\Z)',
+        
+        # Asynchronous function definitions and statements
+        r'\basync\s+def\s+\w+\s*\([^()]*\)\s*:\s*(\n|\Z)',
+        r'\bawait\s+[^ \t\n]+',
+        
+        # Comprehensive list and dictionary comprehensions
+        r'\[.*\s+for\s+.*\s+in\s+.*\]',
+        r'\{.*\s+for\s+.*\s+in\s+.*\}',
+        
+        # Lambda expressions with colon
+        r'\blambda\s+[^:]+:\s+[^ \t\n]+',
+        
+        # Complex assignments with annotations
+        r'\b\w+\s*:\s*[\w\[\], ]+\s*=\s*.*',
+        
+        # Return statements (only if followed by non-trivial expression)
+        r'\breturn\s+[^ \t\n]+',
+        
+        # Exception raising with exception type
+        r'\braise\s+\w+(\(.*\))?',
     ]
-
-    # Generate random 10 digits
-    phone_number = [str(random.randint(0, 9)) for _ in range(10)]
-    # Randomly select a format
-    selected_format = random.choice(formats)
-    # Format the number
-    return selected_format.format(*phone_number)
-
-# Generate 30 unique formatted phone numbers
-phone_numbers = [generate_random_phone_number() for _ in range(30)]
-
-# Display the generated phone numbers
-for number in phone_numbers:
-    print(number)
-
+    
+    # Combine all patterns into a single regex pattern with multiline support
+    combined_pattern = re.compile('|'.join(patterns), re.MULTILINE)
+    
+    # Search for any occurrence of the patterns in the string
+    if combined_pattern.search(s):
+        return True
+    else:
+        return False
