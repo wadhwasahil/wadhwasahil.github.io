@@ -1,38 +1,46 @@
 import random
-import re
 
 def generate_phone_number_variations(n):
     """
-    Generates a list of U.S. phone numbers with exactly 10 digits in various formats.
-    
+    Generates n variations of U.S. phone numbers for each pattern,
+    ensuring each phone number contains exactly 10 digits.
+
     Args:
-        n (int): The number of phone numbers to generate.
-    
+        n (int): The number of variations to generate for each pattern.
+
     Returns:
-        list: A list of phone numbers as strings that look like phone numbers and contain exactly 10 digits.
+        list: A list of phone numbers as strings.
     """
-    # Define a regex pattern for generating phone numbers with exactly 10 digits
+    # Define patterns using placeholders ('D') for digits
     patterns = [
-        r"\d{3}-\d{3}-\d{4}",       # Format: 123-456-7890
-        r"\(\d{3}\) \d{3}-\d{4}",   # Format: (123) 456-7890
-        r"\d{3}\.\d{3}\.\d{4}",     # Format: 123.456.7890
-        r"\d{10}",                  # Format: 1234567890
-        r"\d{3} \d{3} \d{4}",       # Format: 123 456 7890
-        r"\d{3}/\d{3}/\d{4}",       # Format: 123/456/7890
-        r"\d{3}-\d{3}\.\d{4}",      # Format: 123-456.7890
-        r"\d{3}\.\d{3}-\d{4}",      # Format: 123.456-7890
-        r"\(\d{3}\)\d{3}-\d{4}",    # Format: (123)456-7890
-        r"\d{3}\*\d{3}\*\d{4}",     # Format: 123*234*5678
+        "DDD-DDD-DDDD",        # Format: 123-456-7890
+        "(DDD) DDD-DDDD",      # Format: (123) 456-7890
+        "DDD.DDD.DDDD",        # Format: 123.456.7890
+        "DDDDDDDDDD",          # Format: 1234567890
+        "DDD DDD DDDD",        # Format: 123 456 7890
+        "DDD/DDDD/DDD",        # Format: 123/4567/890
+        "DDD-DDD.DDDD",        # Format: 123-456.7890
+        "DDD.DDD-DDDD",        # Format: 123.456-7890
+        "(DDD)DDD-DDDD",       # Format: (123)456-7890
+        "DDD*DDD*DDDD",        # Format: 123*456*7890
     ]
 
     phone_numbers = []
 
-    for _ in range(n):
-        # Randomly select a pattern
-        pattern = random.choice(patterns)
-
-        # Generate a phone number based on the selected pattern
-        phone_number = re.sub(r"\d", lambda x: str(random.randint(0, 9)), pattern)
-        phone_numbers.append(phone_number)
+    for pattern in patterns:
+        for _ in range(n):
+            # Replace 'D' placeholders with random digits
+            phone_number = ''.join(
+                str(random.randint(0, 9)) if ch == 'D' else ch
+                for ch in pattern
+            )
+            phone_numbers.append(phone_number)
 
     return phone_numbers
+
+# Example usage
+if __name__ == "__main__":
+    n = 3  # Specify the number of variations you want to generate for each pattern
+    phone_numbers = generate_phone_number_variations(n)
+    for idx, number in enumerate(phone_numbers, 1):
+        print(f"{idx}. {number}")
