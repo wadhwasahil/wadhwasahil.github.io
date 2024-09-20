@@ -1,72 +1,38 @@
+import random
 import re
 
-def is_python_code(s):
+def generate_phone_number_variations(n):
     """
-    Detects if the given string contains Python code using highly specific regular expressions.
-    Returns True if code is detected, False otherwise.
+    Generates a list of U.S. phone numbers with exactly 10 digits in various formats.
+    
+    Args:
+        n (int): The number of phone numbers to generate.
+    
+    Returns:
+        list: A list of phone numbers as strings that look like phone numbers and contain exactly 10 digits.
     """
-    # Define strict and specific regex patterns for Python code constructs
+    # Define a regex pattern for generating phone numbers with exactly 10 digits
     patterns = [
-        # Function definitions with colon at the end
-        r'\bdef\s+\w+\s*\([^()]*\)\s*:\s*(\n|\Z)',
-        
-        # Class definitions with colon at the end
-        r'\bclass\s+\w+\s*(\(\w+(\.\w+)*\))?\s*:\s*(\n|\Z)',
-        
-        # Decorators
-        r'^\s*@\w+(\.\w+)*\s*(\n|\Z)',
-        
-        # Multi-line string literals (triple quotes)
-        r'\'\'\'[\s\S]*?\'\'\'',
-        r'\"\"\"[\s\S]*?\"\"\"',
-        
-        # Import statements with optional 'as' aliasing
-        r'\bimport\s+[\w\.]+(\s+as\s+\w+)?(\s*,\s*[\w\.]+(\s+as\s+\w+)?)*\s*(\n|\Z)',
-        r'\bfrom\s+[\w\.]+\s+import\s+[\w\.\*]+(\s+as\s+\w+)?(\s*,\s*[\w\.\*]+(\s+as\s+\w+)?)*\s*(\n|\Z)',
-        
-        # If statements with colon at the end
-        r'\bif\s+.*:\s*(\n|\Z)',
-        r'\belif\s+.*:\s*(\n|\Z)',
-        r'\belse\s*:\s*(\n|\Z)',
-        
-        # For and while loops with colon at the end
-        r'\bfor\s+\w+\s+in\s+.*:\s*(\n|\Z)',
-        r'\bwhile\s+.*:\s*(\n|\Z)',
-        
-        # Try, except, finally statements with colon at the end
-        r'\btry\s*:\s*(\n|\Z)',
-        r'\bexcept\s+.*:\s*(\n|\Z)',
-        r'\bfinally\s*:\s*(\n|\Z)',
-        
-        # With statements with colon at the end
-        r'\bwith\s+.*:\s*(\n|\Z)',
-        
-        # Asynchronous function definitions and statements
-        r'\basync\s+def\s+\w+\s*\([^()]*\)\s*:\s*(\n|\Z)',
-        r'\bawait\s+[^ \t\n]+',
-        
-        # Comprehensive list and dictionary comprehensions
-        r'\[.*\s+for\s+.*\s+in\s+.*\]',
-        r'\{.*\s+for\s+.*\s+in\s+.*\}',
-        
-        # Lambda expressions with colon
-        r'\blambda\s+[^:]+:\s+[^ \t\n]+',
-        
-        # Complex assignments with annotations
-        r'\b\w+\s*:\s*[\w\[\], ]+\s*=\s*.*',
-        
-        # Return statements (only if followed by non-trivial expression)
-        r'\breturn\s+[^ \t\n]+',
-        
-        # Exception raising with exception type
-        r'\braise\s+\w+(\(.*\))?',
+        r"\d{3}-\d{3}-\d{4}",       # Format: 123-456-7890
+        r"\(\d{3}\) \d{3}-\d{4}",   # Format: (123) 456-7890
+        r"\d{3}\.\d{3}\.\d{4}",     # Format: 123.456.7890
+        r"\d{10}",                  # Format: 1234567890
+        r"\d{3} \d{3} \d{4}",       # Format: 123 456 7890
+        r"\d{3}/\d{3}/\d{4}",       # Format: 123/456/7890
+        r"\d{3}-\d{3}\.\d{4}",      # Format: 123-456.7890
+        r"\d{3}\.\d{3}-\d{4}",      # Format: 123.456-7890
+        r"\(\d{3}\)\d{3}-\d{4}",    # Format: (123)456-7890
+        r"\d{3}\*\d{3}\*\d{4}",     # Format: 123*234*5678
     ]
-    
-    # Combine all patterns into a single regex pattern with multiline support
-    combined_pattern = re.compile('|'.join(patterns), re.MULTILINE)
-    
-    # Search for any occurrence of the patterns in the string
-    if combined_pattern.search(s):
-        return True
-    else:
-        return False
+
+    phone_numbers = []
+
+    for _ in range(n):
+        # Randomly select a pattern
+        pattern = random.choice(patterns)
+
+        # Generate a phone number based on the selected pattern
+        phone_number = re.sub(r"\d", lambda x: str(random.randint(0, 9)), pattern)
+        phone_numbers.append(phone_number)
+
+    return phone_numbers
